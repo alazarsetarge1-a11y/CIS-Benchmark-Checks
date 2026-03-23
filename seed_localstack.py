@@ -48,8 +48,8 @@ try:
     }]
 )
     
-except sg.exceptions.EntityExists:
-    print('SEcurity Group already exists')
+except ec2.exceptions.EntityExists:
+    print('Security Group already exists, skipping')
 
 print(f'Created vulnerable security group {sg}')
 print('\nLocalStack seeded. Ready for exercises.\n')
