@@ -22,3 +22,8 @@ s3.put_public_access_block(
     }
 )
 print('Created safe bucket')
+
+#IAM below is vulnerable because it does not have MFA configured
+
+iam.create_user(UserName = 'no-mfa-user')
+print('Created IAM user with no MFA')
