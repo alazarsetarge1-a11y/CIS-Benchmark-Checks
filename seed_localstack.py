@@ -37,8 +37,8 @@ sg = ec2.create_security_group(
     Description = 'Intentionally misconfigured',
     VpcId = vpc
 )['GroupId']
-
-ec2.authorize_security_group_ingress(
+try:
+    ec2.authorize_security_group_ingress(
     GroupId = sg,
     IpPermissions = [{
         'IpProtocol' : 'tcp',
@@ -47,6 +47,9 @@ ec2.authorize_security_group_ingress(
         'IpRanges' : [{'CidrIp' : '0.0.0.0/0'}]
     }]
 )
+    
+except sg.exceptions.EntityExists:
+    print('SEcurity Group already exists')
 
 print(f'Created vulnerable security group {sg}')
 print('\nLocalStack seeded. Ready for exercises.\n')
