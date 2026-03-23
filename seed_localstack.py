@@ -24,8 +24,11 @@ s3.put_public_access_block(
 print('Created safe bucket')
 
 #IAM below is vulnerable because it does not have MFA configured
-iam.create_user(UserName = 'no-mfa-user')
-print('Created IAM user with no MFA')
+try:
+    iam.create_user(UserName='no-mfa-user')
+    print('Created IAM user with no MFA')
+except iam.exceptions.EntityAlreadyExistsException:
+    print('IAM user already exists, skipping')
 
 #EC2 has security group with port 22 open to the entire world nooooooo!
 vpc = ec2.describe_vpcs() ['Vpcs'][0]['VpcId']
