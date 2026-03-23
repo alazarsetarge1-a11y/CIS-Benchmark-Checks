@@ -9,7 +9,7 @@ try:
     s3.create_bucket(Bucket = 'vulnerable-bucket')
     s3.delete_public_access_block(Bucket = 'vulnerable-bucket')
     print('Created vulnerable bucket')
-except Exception:
+except s3.exceptions.BucketAlreadyOwnedByYou:
     print('Bucket already exists, skipping')
 
 #S3 below is safe because public access is blocked
@@ -26,14 +26,14 @@ try:
     )
     print('Created safe bucket')
 
-except Exception:
+except s3.exceptions.BucketAlreadyOwnedByYou:
     print('Bucket already exists, skipping')
 
 #IAM below is vulnerable because it does not have MFA configured
 try:
     iam.create_user(UserName='no-mfa-user')
     print('Created IAM user with no MFA')
-except Exception:
+except iam.exceptions.EntityAlreadyExistsException:
     print('IAM user already exists, skipping')
 
 #EC2 has security group with port 22 open to the entire world nooooooo!
@@ -55,8 +55,11 @@ try:
 )
     print(f'Created vulnerable security group {sg}')
     
-except Exception:
-    print('Security Group already exists, skipping')
+except ec2.exceptions.ClientError as e:
+    if 'InvalidGroup.Duplicate' in str(e):
+        print('Security group already exists, skipping')
+    else:
+        raise
 
 
     
