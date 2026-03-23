@@ -44,19 +44,20 @@ try:
     Description = 'Intentionally misconfigured',
     VpcId = vpc
 )['GroupId']
-    
-except ec2.exceptions.EntityExists:
-    print('Security Group already exists, skipping')
-
-ec2.authorize_security_group_ingress(
-GroupId = sg,
-IpPermissions = [{
+    ec2.authorize_security_group_ingress(
+    GroupId = sg,
+    IpPermissions = [{
     'IpProtocol' : 'tcp',
     'FromPort' : 22,
     'ToPort' : 22,
     'IpRanges' : [{'CidrIp' : '0.0.0.0/0'}]
     }]
 )
+    
+except ec2.exceptions.ClientError:
+    print('Security Group already exists, skipping')
+
+
     
 
 
