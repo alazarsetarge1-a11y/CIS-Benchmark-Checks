@@ -9,11 +9,12 @@ total = 0
 
 
 for bucket in response['Buckets']:
-    print(bucket)
+    name = bucket["Name"]
+    date = bucket["CreationDate"]
     total+=1
+    print (f"\nBucket: {name} | Created: {date}")
 
-name = bucket["Name"]
-date = bucket["CreationDate"]
 
-print (f"Bucket:  {name} | Created:  {date}")
-print(f"Total: {total}")
+
+
+print(f"\nTotal: {total}")
