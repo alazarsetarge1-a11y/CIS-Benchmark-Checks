@@ -53,6 +53,7 @@ try:
     'IpRanges' : [{'CidrIp' : '0.0.0.0/0'}]
     }]
 )
+    print(f'Created vulnerable security group {sg}')
     
 except ec2.exceptions.ClientError:
     print('Security Group already exists, skipping')
@@ -60,6 +61,4 @@ except ec2.exceptions.ClientError:
 
     
 
-
-print(f'Created vulnerable security group {sg}')
 print('\nLocalStack seeded. Ready for exercises.\n')
