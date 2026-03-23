@@ -49,4 +49,4 @@ ec2.authorize_security_group_ingress(
 )
 
 print(f'Created vulnerable security group {sg}')
-print('\nLocalStack seeded. Ready for exercises.')
+print('\nLocalStack seeded. Ready for exercises.\n')
