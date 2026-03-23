@@ -28,7 +28,7 @@ iam.create_user(UserName = 'no-mfa-user')
 print('Created IAM user with no MFA')
 
 #EC2 has security group with port 22 open to the entire world nooooooo!
-vpc = ec2.describe_vpcs() ['Vpcs'] [0] ['VpcId']
+vpc = ec2.describe_vpcs() ['Vpcs'][0]['VpcId']
 sg = ec2.create_security_group(
     GroupName = 'vulnerable-sg',
     Description = 'Intentionally misconfigured',
