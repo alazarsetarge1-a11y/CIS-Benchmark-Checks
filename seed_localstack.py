@@ -5,14 +5,17 @@ iam = get_client('iam')
 ec2 = get_client('ec2')
 
 #S3 below is vulnerable because public access is NOT blocked
-s3.create_bucket(Bucket = 'vulnerable-bucket')
-s3.delete_public_access_block(Bucket = 'vulnerable-bucket')
-print('Created vulnerable bucket')
-
+try:
+    s3.create_bucket(Bucket = 'vulnerable-bucket')
+    s3.delete_public_access_block(Bucket = 'vulnerable-bucket')
+    print('Created vulnerable bucket')
+except s3.exceptions.BucketExists:
+    print('Bucket already exists, skipping')
 
 #S3 below is safe because public access is blocked
-s3.create_bucket(Bucket = 'safe-bucket')
-s3.put_public_access_block(
+try:
+    s3.create_bucket(Bucket = 'safe-bucket')
+    s3.put_public_access_block(
     Bucket = 'safe-bucket',
     PublicAccessBlockConfiguration = {
         'BlockPublicAcls' : True,
@@ -21,7 +24,10 @@ s3.put_public_access_block(
         'RestrictPublicBuckets' : True
     }
 )
-print('Created safe bucket')
+    print('Created safe bucket')
+
+except s3.exceptions.VulBucketExists:
+    print('Bucket already exists, skipping')
 
 #IAM below is vulnerable because it does not have MFA configured
 try:
@@ -41,7 +47,7 @@ try:
     
 except ec2.exceptions.EntityExists:
     print('Security Group already exists, skipping')
-    
+
 ec2.authorize_security_group_ingress(
 GroupId = sg,
 IpPermissions = [{
