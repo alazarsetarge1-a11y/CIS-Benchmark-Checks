@@ -29,7 +29,7 @@ print('Created IAM user with no MFA')
 
 #EC2 has security group with port 22 open to the entire world nooooooo!
 vpc = ec2.describe_vpcs() ['Vpcs'] [0] ['VpcId']
-sg = ec2.describe_security_group(
+sg = ec2.create_security_group(
     GroupName = 'vulnerable-sg',
     Description = 'Intentionally misconfigured',
     VpcId = vpc
@@ -37,7 +37,7 @@ sg = ec2.describe_security_group(
 
 ec2.authorize_security_group_ingress(
     GroupId = sg,
-    IpPermission = [{
+    IpPermissions = [{
         'IpProtocol' : 'tcp',
         'FromPort' : 22,
         'ToPort' : 22,
