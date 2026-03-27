@@ -9,20 +9,24 @@ findings = []
 for bucket in response['Buckets']:
     name = bucket["Name"]
 
-try:
-    block = s3.get_public_access_block(Bucket=name)
-    config = block['PublicAccessBlockConfiguration']
+    try:
+        block = s3.get_public_access_block(Bucket=name)
+        config = block['PublicAccessBlockConfiguration']
 
-    if config['BlockPublicAcls'] == False:
+        if config['BlockPublicAcls'] == False:
+            findings.append({
+                'bucket' : name,
+                'severity' : 'CRITICAL',
+                'issue' : 'Public access not blocked'
+            })
+
+    except Exception: 
         findings.append({
             'bucket' : name,
-            'severity' : 'Critical',
-            'issue' : 'Public access not blocked'
+            'severity' : 'CRITICAL',
+            'issue' : 'NO Block Config'
         })
 
-except Exception: 
-    findings.append({
-        'bucket' : name,
-        'severity' : 'Critical',
-        'issue' : 'NO Block Config'
-    })
+    
+for f in findings:
+    print(f"[{f['bucket']}] {f['severity']} {f['issue']}")
