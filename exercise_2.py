@@ -29,4 +29,4 @@ for bucket in response['Buckets']:
 
     
 for f in findings:
-    print(f"[{f['bucket']}] {f['severity']} {f['issue']}")
+    print(f"[{f['severity']}] {f['bucket']} -- {f['issue']}")
