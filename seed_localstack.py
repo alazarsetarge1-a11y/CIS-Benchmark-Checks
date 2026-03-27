@@ -15,7 +15,15 @@ except s3.exceptions.BucketAlreadyOwnedByYou:
 #S3 below is safe because public access is blocked
 try:
     s3.create_bucket(Bucket = 'safe-bucket')
-    
+    s3.put_public_access_block(
+        Bucket = 'safe-bucket',
+        PublicAccessBlockConfiguration = {
+            'BlockPublicAcls' : True,
+            'BlockPublicPolicy' : True,
+            'IgnorePublicAcls' : True,
+            'RestrictPublicBuckets' : True
+        }
+    )
     print('Created safe bucket')
 
 except s3.exceptions.BucketAlreadyOwnedByYou:

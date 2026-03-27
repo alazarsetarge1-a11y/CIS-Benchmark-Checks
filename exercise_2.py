@@ -8,7 +8,7 @@ findings = []
 
 for bucket in response['Buckets']:
     name = bucket["Name"]
-
+    print(f"Checking: {name}")  # prints the buckets being checked
     try:
         block = s3.get_public_access_block(Bucket=name)
         config = block['PublicAccessBlockConfiguration']
@@ -30,3 +30,4 @@ for bucket in response['Buckets']:
     
 for f in findings:
     print(f"[{f['severity']}] {f['bucket']} -- {f['issue']}")
+
