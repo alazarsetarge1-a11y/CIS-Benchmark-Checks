@@ -25,14 +25,20 @@ def check_open_ports():
         # AND FromPort is in DANGEROUS_PORTS
         #
         # Append to findings:
-        # {
-        #     'sg_id': sg_id,
-        #     'sg_name': sg_name,
-        #     'port': port,
-        #     'service': DANGEROUS_PORTS[port],
-        #     'severity': 'CRITICAL',
-        #     'issue': f'Port {port} open to 0.0.0.0/0'
-        # }
+        
+        for rule in sg['IpPermissions']:
+            port = rule.get('FromPort')
+            for ip_range in rule['IpRanges']:
+                if port in DANGEROUS_PORTS and ip_range ['CidrIp'] == '0.0.0.0/0':
+                    findings.append({
+                    'sg_id': sg_id,
+                    'sg_name': sg_name,
+                    'port': port,
+                    'service': DANGEROUS_PORTS[port],
+                    'severity': 'CRITICAL',
+                    'issue': f'Port {port} open to 0.0.0.0/0'})
+        
+        
 
 
 
