@@ -26,4 +26,4 @@ Run the setup script to create intentionally misconfigured resources:
 python seed_localstack.py
 
 ### 4. Run a check
-python exercise_2.py
+python exercise_1-5.py
